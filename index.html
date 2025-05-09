@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Peppvision - Web Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      color: #000;
+      overflow-x: hidden;
+      font-size: 1rem;
+      position: relative;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(200,200,200,0.8)), url('https://source.unsplash.com/1920x1080/?abstract,technology') no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      animation: gradientMove 15s ease-in-out infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .menu-toggle {
+      position: fixed;
+      top: 20px;
+      left: 30px;
+      width: 50px;
+      height: 50px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 2000;
+      transition: background-color 0.3s ease;
+    }
+
+    .menu-toggle:hover { background-color: rgba(255, 255, 255, 1); }
+
+    .menu-toggle div {
+      background: #333;
+      height: 4px;
+      width: 30px;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 300px;
+      height: 100vh;
+      background-color: #fff;
+      padding: 60px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.4s ease;
+      z-index: 1500;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+
+    .menu.open { left: 0; }
+
+    .menu a {
+      color: #333;
+      font-size: 1.2rem;
+      text-decoration: none;
+      margin: 20px 0;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .menu a:hover { color: #000; }
+
+    .menu .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h2 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      color: #333;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .graphic-designer {
+      font-size: 1.3rem;
+      color: #555;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero:hover .graphic-designer { opacity: 1; }
+
+    .cta-button {
+      background-color: #333;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease, transform 0.3s ease;
+      margin-top: 30px;
+    }
+
+    .cta-button:hover {
+      background-color: #444;
+      transform: translateY(-3px);
+    }
+
+    .section {
+      padding: 80px 40px;
+      background-color: #f9f9f9;
+    }
+
+    .about-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #333;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .timeline {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 10%;
+      width: 80%;
+      height: 4px;
+      background: #ccc;
+      z-index: 0;
+    }
+
+    .timeline-point {
+      position: relative;
+      background: #fff;
+      border: 3px solid #333;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .timeline-point:hover {
+      background: #333;
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .timeline-point span {
+      position: absolute;
+      top: 60px;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    .timeline-detail, .real-me {
+      max-width: 700px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .real-me {
+      margin-top: 30px;
+      border-left: 4px solid #333;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #contact {
+      background-color: #fff;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    footer {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    footer a {
+      color: #000;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-toggle" onclick="toggleMenu()" aria-label="Apri menu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav class="menu" id="navMenu">
+    <button class="close-btn" onclick="toggleMenu()">&times;</button>
+    <a href="#" onclick="showSection('about')">Chi Sono</a>
+    <a href="#" onclick="showSection('services')">Servizi</a>
+    <a href="#" onclick="showSection('contact')">Contatti</a>
+  </nav>
+
+  <svg id="eye" width="100" height="60" viewBox="0 0 100 60" style="position: absolute; top: 200px; left: 200px; cursor: grab; z-index: 10;">
+    <ellipse cx="50" cy="30" rx="48" ry="28" stroke="black" stroke-width="4" fill="white"/>
+    <circle cx="50" cy="30" r="15" fill="black"/>
+  </svg>
+
+  <section class="hero">
+    <div>
+      <h2>Peppvision</h2>
+      <p class="graphic-designer">Graphic Designer</p>
+      <button class="cta-button" onclick="showSection('about')">Scopri di più</button>
+    </div>
+  </section>
+
+  <section id="about" class="section" style="display:none;">
+    <h2 class="about-title">La Mia Storia</h2>
+    <div class="timeline">
+      <div class="timeline-point" onclick="showDetail('step1')">🎨<span>2021</span></div>
+      <div class="timeline-point" onclick="showDetail('step2')">💪<span>2022</span></div>
+      <div class="timeline-point" onclick="showDetail('step3')">🚀<span>2025</span></div>
+    </div>
+
+    <div class="timeline-detail" id="step1" style="display: none;">
+      <p>Nel 2021, ho iniziato a lavorare nel mondo del design, esplorando nuove tecniche e collaborando con piccoli progetti.</p>
+    </div>
+    <div class="timeline-detail" id="step2" style="display: none;">
+      <p>Nel 2022 ho lavorato molto, affinando le mie competenze e collaborando con vari clienti, migliorando continuamente.</p>
+    </div>
+    <div class="timeline-detail" id="step3" style="display: none;">
+      <p>Nel 2025, apro <strong>PeppVision</strong>: il mio progetto ufficiale per offrire servizi creativi con uno stile unico.</p>
+    </div>
+
+    <button class="cta-button" onclick="showRealSelf()">Chi sono veramente</button>
+
+    <div class="real-me" id="realMe" style="display: none;">
+      <p><strong>Mi chiamo Giuseppe, ho 15 anni</strong> e sono un creativo determinato, curioso e sempre in evoluzione.<br>
+      Amo il design, la comunicazione digitale e creare esperienze visive che lasciano il segno.</p>
+    </div>
+  </section>
+
+  <section id="services" class="section" style="display:none;">
+    <h2 class="about-title">I miei Servizi</h2>
+    
+    <div class="carousel-container">
+      <!-- Freccia Sinistra -->
+      <button class="carousel-arrow-left" onclick="moveCarousel(-1)" style="display: none;">&#10094;</button>
+      
+      <div class="carousel" id="carousel">
+        <!-- Servizio 1: Loghi & Branding -->
+        <div class="carousel-item">
+          <h3>Loghi & Branding</h3>
+          <button class="cta-button" onclick="showServiceDetails('logo-branding')">Scopri di più</button>
+          <div class="service-details" id="logo-branding" style="display: none;">
+            <ul>
+              <li>Logo base: 25€</li>
+              <li>Logo completo: 40€</li>
+              <li>Brand kit: 70€</li>
+              <li>Restyling logo esistente: 20€</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Servizio 2: Social & Digital -->
+        <div class="carousel-item">
+          <h3>Social & Digital</h3>
+          <button class="cta-button" onclick="showServiceDetails('social-digital')">Scopri di più</button>
+          <div class="service-details" id="social-digital" style="display: none;">
+            <ul>
+              <li>Post Instagram/Facebook: 15€</li>
+              <li>Post elaborato (5 slide): 45€</li>
+              <li>Set up del profilo: 20€</li>
+              <li>Cover per video/reels: 10€</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Servizio 3: Eventi & Locali -->
+        <div class="carousel-item">
+          <h3>Eventi & Locali</h3>
+          <button class="cta-button" onclick="showServiceDetails('eventi-locali')">Scopri di più</button>
+          <div class="service-details" id="eventi-locali" style="display: none;">
+            <ul>
+              <li>Locandina per evento: 30€</li>
+              <li>Pack 3 locandine coordinate: 80€</li>
+              <li>Poster A3/A4: 35€</li>
+              <li>Banner pubblicitari: 40€</li>
+              <li>Design per stand completo: 100€</li>
+              <li>Menù digitali: 20€</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Servizio 4: Aziende & Società -->
+        <div class="carousel-item">
+          <h3>Aziende & Società</h3>
+          <button class="cta-button" onclick="showServiceDetails('aziende-societa')">Scopri di più</button>
+          <div class="service-details" id="aziende-societa" style="display: none;">
+            <ul>
+              <li>Grafiche per T-shirt: 20€</li>
+              <li>Merchandising completo: 70€</li>
+              <li>Presentazioni aziendali: da 30€</li>
+              <li>Biglietti da visita: 20€</li>
+              <li>Packaging design: da 35€</li>
+              <li>Brouchure: 45€</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Servizio 5: Video & Editing -->
+        <div class="carousel-item">
+          <h3>Video & Editing</h3>
+          <button class="cta-button" onclick="showServiceDetails('video-editing')">Scopri di più</button>
+          <div class="service-details" id="video-editing" style="display: none;">
+            <ul>
+              <li>Video breve promo (max 30s): 20€</li>
+              <li>Video animato: da 35€</li>
+              <li>Video reel con montaggio: 50€</li>
+              <li>Intro/Outro: 25€</li>
+              <li>Editing Podcast: da 35€</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Servizio 6: Musica & Copertine -->
+        <div class="carousel-item">
+          <h3>Musica & Copertine</h3>
+          <button class="cta-button" onclick="showServiceDetails('musica-copertine')">Scopri di più</button>
+          <div class="service-details" id="musica-copertine" style="display: none;">
+            <ul>
+              <li>Cover per Spotify/YouTube: 30€</li>
+              <li>Cover + mini animazione: 50€</li>
+              <li>Strategia Social: da 35€</li>
+              <li>Pack Promo: 60€</li>
+              <li>Kit per singolo: 80€</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Servizio 7: Siti Web -->
+        <div class="carousel-item">
+          <h3>Siti Web</h3>
+          <button class="cta-button" onclick="showServiceDetails('siti-web')">Scopri di più</button>
+          <div class="service-details" id="siti-web" style="display: none;">
+            <ul>
+              <li>Landing Page personalizzata: 70€</li>
+              <li>Sito vetrina: 150€</li>
+              <li>Sito completo: da 250€</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Freccia Destra -->
+      <button class="carousel-arrow-right" onclick="moveCarousel(1)" style="display: none;">&#10095;</button>
+    </div>
+  </section>
+  
+  <!-- Script per il carosello -->
+  <script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.carousel-item');
+    const totalItems = items.length;
+  
+    function moveCarousel(direction) {
+      currentIndex += direction;
+  
+      if (currentIndex < 0) {
+        currentIndex = totalItems - 1;
+      } else if (currentIndex >= totalItems) {
+        currentIndex = 0;
+      }
+  
+      const carousel = document.getElementById('carousel');
+      const offset = -currentIndex * 100;
+      carousel.style.transform = `translateX(${offset}%)`;
+  
+      const leftArrow = document.querySelector('.carousel-arrow-left');
+      const rightArrow = document.querySelector('.carousel-arrow-right');
+  
+      if (currentIndex === 0) {
+        leftArrow.style.display = 'none';
+      } else {
+        leftArrow.style.display = 'block';
+      }
+  
+      if (currentIndex === totalItems - 1) {
+        rightArrow.style.display = 'none';
+      } else {
+        rightArrow.style.display = 'block';
+      }
+    }
+  
+    function showServiceDetails(serviceId) {
+      const details = document.getElementById(serviceId);
+      if (details.style.display === 'none') {
+        details.style.display = 'block';
+      } else {
+        details.style.display = 'none';
+      }
+    }
+  
+    window.onload = () => {
+      moveCarousel(0);
+    };
+  </script>
+  
+  <style>
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+  
+    .carousel-item {
+      min-width: 100%;
+      text-align: center;
+      padding: 20px;
+    }
+  
+    .cta-button {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+  
+    .cta-button:hover {
+      background-color: #444;
+    }
+  
+    .carousel-arrow-left, .carousel-arrow-right {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      font-size: 2rem;
+      padding: 10px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      z-index: 1;
+    }
+  
+    .carousel-arrow-left {
+      left: 20px;
+    }
+  
+    .carousel-arrow-right {
+      right: 20px;
+    }
+  
+    .service-details ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+  
+    .service-details li {
+      padding: 5px 0;
+    }
+  </style>
+
+<section id="contact" class="section">
+    <h2>Contatti</h2>
+    <p>Hai domande o vuoi semplicemente entrare in contatto con me? Scrivimi un messaggio o usa i miei contatti qui sotto.</p>
+  
+    <!-- Modulo di contatto -->
+    <form id="contactForm" onsubmit="return handleFormSubmit(event)">
+      <div>
+        <label for="name">Nome</label>
+        <input type="text" id="name" name="name" required placeholder="Il tuo nome">
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="La tua email">
+      </div>
+      <div>
+        <label for="message">Messaggio</label>
+        <textarea id="message" name="message" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
+      </div>
+      <button type="submit" class="cta-button">Invia Messaggio</button>
+    </form>
+  
+    <!-- Informazioni di contatto -->
+    <div class="contact-info">
+      <p><strong>Email:</strong> <a href="mailto:grassopeppe13@gmail.com">grassopeppe13@gmail.com</a></p>
+      <p><strong>Telefono:</strong> <a href="tel:+393519509633">+39 351 950 9633</a></p>
+      <p><strong>Instagram:</strong> <a href="https://www.instagram.com/peppvision?igsh=eGM4MjRrbnlub28x&utm_source=qr" target="_blank">@peppvision</a></p>
+      <p><strong>TikTok:</strong> <a href="https://www.tiktok.com/@peppvision?_t=ZN-8wDkK12YlxW&_r=1" target="_blank">@peppvision</a></p>
+    </div>
+  
+    <!-- Feedback di invio -->
+    <div id="feedbackMessage" style="display:none;">
+      <p>Grazie per averci contattato! Risponderò al più presto possibile.</p>
+    </div>
+  </section>
+  
+  <style>
+    #contactForm {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  
+    #contactForm div {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    #contactForm label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  
+    #contactForm input,
+    #contactForm textarea {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+  
+    #contactForm button {
+      background-color: #333;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 50px;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+  
+    #contactForm button:hover {
+      background-color: #444;
+    }
+  
+    .contact-info {
+      margin-top: 30px;
+      font-size: 1rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 60px; /* Aumentato margine inferiore per distanziare di più dalla sezione successiva */
+    }
+  
+    .contact-info a {
+      color: #333;
+      text-decoration: none;
+    }
+  
+    .contact-info a:hover {
+      color: #000;
+    }
+  
+    #feedbackMessage {
+      margin-top: 40px; /* Spazio maggiore prima del feedback */
+      text-align: center;
+      color: #28a745;
+      font-size: 1.2rem;
+    }
+  </style>
+  
+  <script>
+    function handleFormSubmit(event) {
+      event.preventDefault();
+  
+      // Simulazione di invio del modulo
+      const feedbackMessage = document.getElementById("feedbackMessage");
+      const form = document.getElementById("contactForm");
+  
+      // Nascondi il modulo e mostra il messaggio di feedback
+      form.style.display = "none";
+      feedbackMessage.style.display = "block";
+  
+      // Reset del modulo (facoltativo)
+      form.reset();
+    }
+  </script>
+  
+  
+ 
+  <section id="contact" class="section" style="display:none;">
+    <h2>Contatti</h2>
+    <p>Scrivimi a <a href="mailto:info@peppvision.com">info@peppvision.com</a></p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Peppvision. Tutti i diritti riservati. | <a href="#">Top</a></p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("navMenu").classList.toggle("open");
+    }
+
+    function showSection(id) {
+      const sections = document.querySelectorAll(".section");
+      sections.forEach(sec => sec.style.display = "none");
+      document.getElementById(id).style.display = "block";
+      window.scrollTo(0, 0);
+    }
+
+    function showDetail(id) {
+      const details = document.querySelectorAll('.timeline-detail');
+      details.forEach(detail => detail.style.display = 'none');
+      document.getElementById('realMe').style.display = 'none';
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function showRealSelf() {
+      const details = document.querySelectorAll('.timeline-detail');
+      details.forEach(detail => detail.style.display = 'none');
+      document.getElementById('realMe').style.display = 'block';
+    }
+
+    const eye = document.getElementById("eye");
+    let isDragging = false;
+    let offsetX, offsetY;
+    let velocityY = 0;
+    let gravity = 0.5;
+    let animationFrame;
+    let rotation = 0;
+
+    eye.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      velocityY = 0;
+      cancelAnimationFrame(animationFrame);
+      offsetX = e.clientX - eye.getBoundingClientRect().left;
+      offsetY = e.clientY - eye.getBoundingClientRect().top;
+      eye.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        eye.style.left = `${e.clientX - offsetX}px`;
+        eye.style.top = `${e.clientY - offsetY}px`;
+      }
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        eye.style.cursor = "grab";
+        fall();
+      }
+    });
+
+    function fall() {
+      const eyeRect = eye.getBoundingClientRect();
+      const bottom = window.innerHeight - eyeRect.height;
+
+      function animate() {
+        let top = parseFloat(eye.style.top.replace("px", ""));
+        if (top < bottom) {
+          velocityY += gravity;
+          top += velocityY;
+          if (top > bottom) top = bottom;
+          rotation += velocityY * 0.2;
+          eye.style.top = `${top}px`;
+          eye.style.transform = `rotate(${rotation}deg)`;
+          animationFrame = requestAnimationFrame(animate);
+        }
+      }
+
+      animate();
+    }
+  </script>
+</body>
+</html>
