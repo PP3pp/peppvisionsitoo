@@ -825,6 +825,8 @@ html {
       }
       animate();
     }
+    animate();
+    }
 
     // --- Supporto per il touch (mobile) ---
     eye.addEventListener("touchstart", (e) => {
@@ -842,6 +844,9 @@ html {
         const touch = e.touches[0];
         eye.style.left = `${touch.clientX - offsetX}px`;
         eye.style.top = `${touch.clientY - offsetY}px`;
+
+        // Impedisce lo scroll della pagina
+        e.preventDefault();
       }
     });
 
@@ -853,6 +858,7 @@ html {
       }
     });
   </script>
+
 
 <section id="abbonamenti" class="section">
   <h2>Abbonamenti</h2>
