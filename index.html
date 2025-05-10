@@ -857,6 +857,31 @@ html {
 
       animate();
     }
+
+    eye.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  velocityY = 0;
+  cancelAnimationFrame(animationFrame);
+  const touch = e.touches[0];
+  offsetX = touch.clientX - eye.getBoundingClientRect().left;
+  offsetY = touch.clientY - eye.getBoundingClientRect().top;
+}, { passive: false });
+
+window.addEventListener("touchmove", (e) => {
+  if (isDragging) {
+    const touch = e.touches[0];
+    eye.style.left = `${touch.clientX - offsetX}px`;
+    eye.style.top = `${touch.clientY - offsetY}px`;
+  }
+}, { passive: false });
+
+window.addEventListener("touchend", () => {
+  if (isDragging) {
+    isDragging = false;
+    fall();
+  }
+});
+
   </script>
 
 <section id="abbonamenti" class="section">
