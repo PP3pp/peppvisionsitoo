@@ -248,6 +248,83 @@
       color: #000;
       text-decoration: none;
     }
+    /* Aggiungi un'animazione fluida per il menu */
+.nav-menu {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease;
+  transform: translateX(100%); /* Menu nascosto (fuori dalla vista) */
+  opacity: 0; /* Menu nascosto */
+}
+
+.nav-menu.open {
+  transform: translateX(0); /* Menu visibile (riportato nella vista) */
+  opacity: 1; /* Menu visibile */
+}
+
+/* Aggiungi il comportamento per il body per abilitare la scorrimento fluida */
+html {
+  scroll-behavior: smooth;  /* Definisce il comportamento di scorrimento fluido */
+}
+/* Sezione abbonamenti */
+.abbonamenti-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+}
+
+.abbonamento {
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.abbonamento .label {
+  z-index: 20;
+  color: white;
+}
+
+.abbonamento .cover {
+  width: 100%;
+  height: 100%;
+  background-color: #777;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  cursor: pointer;
+}
+
+/* Animazione di grattamento */
+.abbonamento.grattato .cover {
+  opacity: 0;
+}
+
+.abbonamento-details {
+  display: none;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.abbonamento-details p {
+  font-size: 1.2em;
+  color: #333;
+}
+
   </style>
 </head>
 <body>
@@ -259,11 +336,15 @@
 
   <nav class="menu" id="navMenu">
     <button class="close-btn" onclick="toggleMenu()">&times;</button>
-    <a href="#" onclick="showSection('about')">Chi Sono</a>
-    <a href="#" onclick="showSection('services')">Servizi</a>
-    <a href="#" onclick="showSection('contact')">Contatti</a>
+    <a href="#about" onclick="showSection('about')">Chi Sono</a>
+    <a href="#services" onclick="showSection('services')">Servizi</a>
+    <a href="#contact" onclick="showSection('contact')">Contatti</a>
+    <a href= "#abbonamenti" onclick="showSection('abbonamenti')"> Abbonamenti</a>
+    
   </nav>
-
+  
+  
+  
   <svg id="eye" width="100" height="60" viewBox="0 0 100 60" style="position: absolute; top: 200px; left: 200px; cursor: grab; z-index: 10;">
     <ellipse cx="50" cy="30" rx="48" ry="28" stroke="black" stroke-width="4" fill="white"/>
     <circle cx="50" cy="30" r="15" fill="black"/>
@@ -273,9 +354,11 @@
     <div>
       <h2>Peppvision</h2>
       <p class="graphic-designer">Graphic Designer</p>
-      <button class="cta-button" onclick="showSection('about')">Scopri di più</button>
+      <button class="cta-button" onclick="toggleMenu()">Scopri di più</button>
     </div>
   </section>
+
+  
 
   <section id="about" class="section" style="display:none;">
     <h2 class="about-title">La Mia Storia</h2>
@@ -741,8 +824,114 @@
         }
       }
 
+        // Movimento pupilla con mouse e touch
+  const pupilla = document.querySelector('.pupil');
+  const occhio = document.querySelector('.eye');
+
+  function muoviPupilla(clientX, clientY) {
+    const rect = occhio.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const dx = clientX - centerX;
+    const dy = clientY - centerY;
+    const angle = Math.atan2(dy, dx);
+
+    const raggioMax = 20;
+    const x = Math.cos(angle) * raggioMax;
+    const y = Math.sin(angle) * raggioMax;
+
+    pupilla.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    muoviPupilla(e.clientX, e.clientY);
+  });
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+      muoviPupilla(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+
       animate();
     }
   </script>
+
+<section id="abbonamenti" class="section">
+  <h2>Abbonamenti</h2>
+  <div class="abbonamenti-container">
+    <!-- Rettangolo Basic -->
+    <div class="abbonamento" id="basic" onclick="revealDetails('basic')">
+      <div class="cover" id="cover-basic"></div>
+      <p class="label">Basic</p>
+    </div>
+    <!-- Rettangolo Standard -->
+    <div class="abbonamento" id="standard" onclick="revealDetails('standard')">
+      <div class="cover" id="cover-standard"></div>
+      <p class="label">Standard</p>
+    </div>
+    <!-- Rettangolo Pro -->
+    <div class="abbonamento" id="pro" onclick="revealDetails('pro')">
+      <div class="cover" id="cover-pro"></div>
+      <p class="label">Pro</p>
+    </div>
+    <!-- Rettangolo Premium -->
+    <div class="abbonamento" id="premium" onclick="revealDetails('premium')">
+      <div class="cover" id="cover-premium"></div>
+      <p class="label">Premium</p>
+    </div>
+  </div>
+  <div id="abbonamento-details" class="abbonamento-details">
+    <p id="abbonamento-description"></p>
+  </div>
+</section>
+
+<script>
+// Funzione per rivelare i dettagli dell'abbonamento
+function revealDetails(abbonamento) {
+  const covers = document.querySelectorAll('.cover');
+  const selectedCover = document.getElementById('cover-' + abbonamento);
+  
+  // Aggiungi la classe "grattato" per l'effetto grattamento
+  selectedCover.parentNode.classList.add('grattato');
+
+  // Dettagli di ogni abbonamento
+  const abbonamentiInfo = {
+    'basic': 'Basic: 4 post + 1 video - 60€/mese',
+    'standard': 'Standard: 8 post + 2 video - 100€/mese',
+    'pro': 'Pro: 12 post + 3 video - 150€/mese',
+    'premium': 'Premium: 20 post + 4 video + landing page - 300€/mese'
+  };
+
+  // Mostra i dettagli dell'abbonamento selezionato
+  const abbonamentoDetails = document.getElementById('abbonamento-details');
+  const abbonamentoDescription = document.getElementById('abbonamento-description');
+  abbonamentoDescription.textContent = abbonamentiInfo[abbonamento];
+  abbonamentoDetails.style.display = 'block';  // Rendi visibili i dettagli
+}
+
+// Funzione per aprire e chiudere il menu hamburger
+function toggleMenu() {
+  const navMenu = document.getElementById("navMenu");
+  navMenu.classList.toggle("open");
+}
+
+// Funzione per navigare verso una sezione e chiudere il menu
+function showSection(id) {
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(sec => sec.style.display = "none"); // Nascondi tutte le sezioni
+  const section = document.getElementById(id);
+  section.style.display = "block"; // Mostra la sezione selezionata
+  
+  // Scroll smooth alla sezione
+  section.scrollIntoView({ behavior: 'smooth' });
+  
+  // Chiudi il menu hamburger
+  document.getElementById("navMenu").classList.remove("open");
+}
+</script>
+
 </body>
 </html>
