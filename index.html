@@ -823,65 +823,35 @@ html {
           animationFrame = requestAnimationFrame(animate);
         }
       }
-
-        // Movimento pupilla con mouse e touch
-  const pupilla = document.querySelector('.pupil');
-  const occhio = document.querySelector('.eye');
-
-  function muoviPupilla(clientX, clientY) {
-    const rect = occhio.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const dx = clientX - centerX;
-    const dy = clientY - centerY;
-    const angle = Math.atan2(dy, dx);
-
-    const raggioMax = 20;
-    const x = Math.cos(angle) * raggioMax;
-    const y = Math.sin(angle) * raggioMax;
-
-    pupilla.style.transform = `translate(${x}px, ${y}px)`;
-  }
-
-  window.addEventListener('mousemove', (e) => {
-    muoviPupilla(e.clientX, e.clientY);
-  });
-
-  window.addEventListener('touchmove', (e) => {
-    if (e.touches.length > 0) {
-      muoviPupilla(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  }, { passive: true });
-
-
       animate();
     }
 
+    // --- Supporto per il touch (mobile) ---
     eye.addEventListener("touchstart", (e) => {
-  isDragging = true;
-  velocityY = 0;
-  cancelAnimationFrame(animationFrame);
-  const touch = e.touches[0];
-  offsetX = touch.clientX - eye.getBoundingClientRect().left;
-  offsetY = touch.clientY - eye.getBoundingClientRect().top;
-}, { passive: false });
+      const touch = e.touches[0];
+      isDragging = true;
+      velocityY = 0;
+      cancelAnimationFrame(animationFrame);
+      offsetX = touch.clientX - eye.getBoundingClientRect().left;
+      offsetY = touch.clientY - eye.getBoundingClientRect().top;
+      eye.style.cursor = "grabbing";
+    });
 
-window.addEventListener("touchmove", (e) => {
-  if (isDragging) {
-    const touch = e.touches[0];
-    eye.style.left = `${touch.clientX - offsetX}px`;
-    eye.style.top = `${touch.clientY - offsetY}px`;
-  }
-}, { passive: false });
+    window.addEventListener("touchmove", (e) => {
+      if (isDragging) {
+        const touch = e.touches[0];
+        eye.style.left = `${touch.clientX - offsetX}px`;
+        eye.style.top = `${touch.clientY - offsetY}px`;
+      }
+    });
 
-window.addEventListener("touchend", () => {
-  if (isDragging) {
-    isDragging = false;
-    fall();
-  }
-});
-
+    window.addEventListener("touchend", () => {
+      if (isDragging) {
+        isDragging = false;
+        eye.style.cursor = "grab";
+        fall();
+      }
+    });
   </script>
 
 <section id="abbonamenti" class="section">
