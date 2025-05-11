@@ -386,6 +386,26 @@ html {
     </div>
   </section>
 
+<script>
+  function showDetail(id) {
+    // Nascondi tutti i dettagli
+    const details = document.querySelectorAll('.timeline-detail');
+    details.forEach(detail => detail.style.display = 'none');
+  
+    // Mostra il dettaglio selezionato
+    document.getElementById(id).style.display = 'block';
+  }
+  </script>
+
+  <script>
+    function showRealSelf() {
+  const details = document.querySelectorAll('.timeline-detail');
+  details.forEach(detail => detail.style.display = 'none');  // Nasconde i dettagli della timeline
+
+  document.getElementById('realMe').style.display = 'block';  // Mostra la sezione "Chi sono veramente"
+}
+</script>
+
   <section id="services" class="section" style="display:none;">
     <h2 class="about-title">I miei Servizi</h2>
     
@@ -751,30 +771,6 @@ html {
   </footer>
 
   <script>
-    function toggleMenu() {
-      document.getElementById("navMenu").classList.toggle("open");
-    }
-
-    function showSection(id) {
-      const sections = document.querySelectorAll(".section");
-      sections.forEach(sec => sec.style.display = "none");
-      document.getElementById(id).style.display = "block";
-      window.scrollTo(0, 0);
-    }
-
-    function showDetail(id) {
-      const details = document.querySelectorAll('.timeline-detail');
-      details.forEach(detail => detail.style.display = 'none');
-      document.getElementById('realMe').style.display = 'none';
-      document.getElementById(id).style.display = 'block';
-    }
-
-    function showRealSelf() {
-      const details = document.querySelectorAll('.timeline-detail');
-      details.forEach(detail => detail.style.display = 'none');
-      document.getElementById('realMe').style.display = 'block';
-    }
-
     const eye = document.getElementById("eye");
     let isDragging = false;
     let offsetX, offsetY;
@@ -782,7 +778,8 @@ html {
     let gravity = 0.5;
     let animationFrame;
     let rotation = 0;
-
+  
+    // Aggiungi il supporto per il mouse (desktop)
     eye.addEventListener("mousedown", (e) => {
       isDragging = true;
       velocityY = 0;
@@ -790,15 +787,17 @@ html {
       offsetX = e.clientX - eye.getBoundingClientRect().left;
       offsetY = e.clientY - eye.getBoundingClientRect().top;
       eye.style.cursor = "grabbing";
+      e.preventDefault(); // Preveniamo lo scrolling della pagina durante il drag
     });
-
+  
+    // Supporto per il mouse su PC
     window.addEventListener("mousemove", (e) => {
       if (isDragging) {
         eye.style.left = `${e.clientX - offsetX}px`;
         eye.style.top = `${e.clientY - offsetY}px`;
       }
     });
-
+  
     window.addEventListener("mouseup", () => {
       if (isDragging) {
         isDragging = false;
@@ -806,11 +805,41 @@ html {
         fall();
       }
     });
-
+  
+    // Supporto touch su dispositivi mobili
+    eye.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      isDragging = true;
+      velocityY = 0;
+      cancelAnimationFrame(animationFrame);
+      offsetX = touch.clientX - eye.getBoundingClientRect().left;
+      offsetY = touch.clientY - eye.getBoundingClientRect().top;
+      eye.style.cursor = "grabbing";
+      e.preventDefault();  // Preveniamo lo scrolling della pagina
+    });
+  
+    window.addEventListener("touchmove", (e) => {
+      if (isDragging) {
+        const touch = e.touches[0];
+        eye.style.left = `${touch.clientX - offsetX}px`;
+        eye.style.top = `${touch.clientY - offsetY}px`;
+        e.preventDefault(); // Preveniamo lo scrolling della pagina
+      }
+    });
+  
+    window.addEventListener("touchend", () => {
+      if (isDragging) {
+        isDragging = false;
+        eye.style.cursor = "grab";
+        fall();
+      }
+    });
+  
+    // Funzione per simulare l'effetto di "caduta"
     function fall() {
       const eyeRect = eye.getBoundingClientRect();
       const bottom = window.innerHeight - eyeRect.height;
-
+  
       function animate() {
         let top = parseFloat(eye.style.top.replace("px", ""));
         if (top < bottom) {
@@ -823,42 +852,11 @@ html {
           animationFrame = requestAnimationFrame(animate);
         }
       }
+  
       animate();
     }
-    animate();
-    }
-
-    // --- Supporto per il touch (mobile) ---
-    eye.addEventListener("touchstart", (e) => {
-      const touch = e.touches[0];
-      isDragging = true;
-      velocityY = 0;
-      cancelAnimationFrame(animationFrame);
-      offsetX = touch.clientX - eye.getBoundingClientRect().left;
-      offsetY = touch.clientY - eye.getBoundingClientRect().top;
-      eye.style.cursor = "grabbing";
-    });
-
-    window.addEventListener("touchmove", (e) => {
-      if (isDragging) {
-        const touch = e.touches[0];
-        eye.style.left = `${touch.clientX - offsetX}px`;
-        eye.style.top = `${touch.clientY - offsetY}px`;
-
-        // Impedisce lo scroll della pagina
-        e.preventDefault();
-      }
-    });
-
-    window.addEventListener("touchend", () => {
-      if (isDragging) {
-        isDragging = false;
-        eye.style.cursor = "grab";
-        fall();
-      }
-    });
   </script>
-
+  
 
 <section id="abbonamenti" class="section">
   <h2>Abbonamenti</h2>
