@@ -325,6 +325,146 @@ html {
   color: #333;
 }
 
+/* Splash screen */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #e2e2e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  filter: blur(10px);
+  transition: filter 1.5s ease, opacity 1s ease;
+}
+
+/* Logo nello splash screen */
+#splash-logo {
+  width: 80px;
+  height: auto;
+  transform: scale(1);
+  transition: transform 1.5s ease;
+}
+
+/* Logo nella landing page */
+#main-logo {
+  width: 80px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  right:30px;
+  opacity: 0; /* Invisibile all'inizio */
+  transition: opacity 1s ease;
+}
+
+/* Stati attivati via JS */
+#splash-screen.revealed {
+  filter: blur(0);
+}
+
+#splash-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+/* Tema base */
+body {
+  background-color: #ffffff;
+  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tema scuro */
+body.dark-mode {
+  background-color: #121212;
+  color: #e2e2e2;
+}
+
+/* Bottone pillola con occhio */
+#eye-switch {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  width: 60px;
+  height: 30px;
+  background-color: #ddd;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.5s ease, right 0.5s ease, background-color 0.3s;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+#eye-icon {
+  font-size: 20px;
+  pointer-events: none;
+}
+
+/* Quando in dark mode, sposta a destra */
+body.dark-mode #eye-switch {
+  left: auto;
+  right: 20px;
+  background-color: #333;
+}
+
+/* Tema chiaro (default) */
+body {
+  background-color: #fff;
+  color: #000;
+  transition: background-color 0.4s, color 0.4s;
+}
+
+/* Tema scuro */
+body.dark-mode {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Pillola */
+#theme-switch {
+  position: fixed;
+  top: 30px;
+  left: 120px;
+  width: 70px;
+  height: 36px;
+  background-color: #000;
+  border-radius: 36px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Cerchio con occhio */
+#pill-eye {
+  width: 28px;
+  height: 28px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  color: #000;
+}
+
+/* Posizione e stile in modalità scura */
+body.dark-mode #theme-switch {
+  background-color: #fff;
+}
+
+body.dark-mode #pill-eye {
+  transform: translateX(34px);
+  background-color: #000;
+  color: #fff;
+}
+
+
   </style>
 </head>
 <body>
@@ -333,6 +473,7 @@ html {
     <div></div>
     <div></div>
   </div>
+
 
   <nav class="menu" id="navMenu">
     <button class="close-btn" onclick="toggleMenu()">&times;</button>
@@ -345,10 +486,32 @@ html {
   
   
   
-  <svg id="eye" width="100" height="60" viewBox="0 0 100 60" style="position: absolute; top: 200px; left: 200px; cursor: grab; z-index: 10;">
+  <svg id="eye" width="100" height="60" viewBox="0 0 100 60" style="position: absolute; top: 650px; left: 60px; cursor: grab; z-index: 10;">
     <ellipse cx="50" cy="30" rx="48" ry="28" stroke="black" stroke-width="4" fill="white"/>
     <circle cx="50" cy="30" r="15" fill="black"/>
   </svg>
+
+  <!-- Freccia -->
+<svg id="arrow" width="50" height="50" viewBox="0 0 24 24" 
+style="position: absolute; top: 660px; left: 170px; z-index: 10;">
+<path d="M2 12h20m-6-6 6 6-6 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+<!-- Lampadina -->
+<svg id="bulb" width="40" height="125" viewBox="0 0 24 24"
+style="position: absolute; top: 620px; left: 230px; cursor: pointer; z-index: 10;">
+<path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.86-1.4 4.1-2.2 4.88A3.97 3.97 0 0 0 16 17H8a3.97 3.97 0 0 0-.8-3.12C6.4 13.1 5 11.86 5 9a7 7 0 0 1 7-7Z"
+   stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+<!-- Scritta nascosta -->
+<p id="eye-message" style="position: absolute; top: 680px; right: 125px; 
+max-width: 300px; font-style: italic; text-decoration: underline;
+font-size: 16px; color: black; opacity: 0; transition: opacity 0.5s ease;">
+L’occhio ti osserva... ma tu puoi controllarlo. 
+Trascinalo, muovilo, lancialo: scopri cosa succede!
+</p>
+
 
   <section class="hero">
     <div>
@@ -930,6 +1093,113 @@ function showSection(id) {
   // Chiudi il menu hamburger
   document.getElementById("navMenu").classList.remove("open");
 }
+</script>
+
+  <!-- Splash screen -->
+  <div id="splash-screen">
+    <img src="logo.png" id="splash-logo" alt="Logo" />
+  </div>
+
+  <!-- Header con logo nella landing -->
+  <header>
+    <img src="logo.png" id="main-logo" alt="Logo principale" />
+  </header>
+
+  <!-- Il resto della tua landing page -->
+  <main>
+    <!-- contenuti della landing -->
+  </main>
+
+  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const splash = document.getElementById('splash-screen');
+    const splashLogo = document.getElementById('splash-logo');
+    const mainLogo = document.getElementById('main-logo');
+
+    // Avvia l'animazione iniziale
+    setTimeout(() => {
+      splash.classList.add('revealed');
+      splashLogo.style.transform = 'scale(1.3)';
+    }, 100);
+
+    // Dopo lo zoom, fade-out dello splash
+    setTimeout(() => {
+      splash.classList.add('fade-out');
+      mainLogo.style.opacity = 1; // Mostra il logo finale
+    }, 2500);
+
+    // Dopo dissolvenza, rimuovi del tutto lo splash (opzionale)
+    setTimeout(() => {
+      splash.style.display = 'none';
+    }, 3500);
+  });
+</script>
+
+<script>
+  const bulb = document.getElementById('bulb');
+  const message = document.getElementById('eye-message');
+
+  bulb.addEventListener('click', () => {
+    message.style.opacity = '1';
+  });
+</script>
+
+<script>
+  const toggleBtn = document.getElementById('theme-toggle');
+  const eyeSwitch = document.getElementById('eye-switch');
+  const body = document.body;
+
+  // Cambia tema
+  toggleBtn.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+
+    // Cambia testo del pulsante
+    if (body.classList.contains('dark-mode')) {
+      toggleBtn.textContent = '☀️ Modalità chiara';
+    } else {
+      toggleBtn.textContent = '🌙 Modalità scura';
+    }
+  });
+
+  // Anche cliccando sull’occhio cambia tema
+  eyeSwitch.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+
+    if (body.classList.contains('dark-mode')) {
+      toggleBtn.textContent = '☀️ Modalità chiara';
+    } else {
+      toggleBtn.textContent = '🌙 Modalità scura';
+    }
+  });
+</script>
+
+<div id="theme-switch" class="pill">
+  <div id="pill-eye">
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="12" cy="12" r="3" fill="currentColor"/>
+    </svg>
+  </div>
+</div>
+
+
+<script>
+  const pill = document.getElementById('theme-switch');
+  const body = document.body;
+
+  pill.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+  });
+</script>
+
+<script>
+  const pill = document.getElementById('theme-switch');
+  const body = document.body;
+
+  pill.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    pill.classList.toggle('dark-mode');
+  });
 </script>
 
 </body>
