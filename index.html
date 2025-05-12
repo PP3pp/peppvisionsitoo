@@ -349,16 +349,6 @@ html {
   transition: transform 1.5s ease;
 }
 
-/* Logo nella landing page */
-#main-logo {
-  width: 80px;
-  height: auto;
-  position: absolute;
-  top: 20px;
-  right:30px;
-  opacity: 0; /* Invisibile all'inizio */
-  transition: opacity 1s ease;
-}
 
 /* Stati attivati via JS */
 #splash-screen.revealed {
@@ -369,101 +359,48 @@ html {
   opacity: 0;
   pointer-events: none;
 }
-/* Tema base */
+
+/* Cursore personalizzato - mano rossa */
+a, button, .clickable {
+  cursor: url('path_to_your_hand_red_image.png'), pointer;  /* Cursore personalizzato */
+}
+
 body {
-  background-color: #ffffff;
-  color: #000000;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: none; /* Nasconde il cursore predefinito */
 }
 
-/* Tema scuro */
-body.dark-mode {
-  background-color: #121212;
-  color: #e2e2e2;
-}
-
-/* Bottone pillola con occhio */
-#eye-switch {
-  position: fixed;
-  top: 80px;
-  left: 20px;
-  width: 60px;
-  height: 30px;
-  background-color: #ddd;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: left 0.5s ease, right 0.5s ease, background-color 0.3s;
-  z-index: 1000;
-  cursor: pointer;
-}
-
-#eye-icon {
-  font-size: 20px;
-  pointer-events: none;
-}
-
-/* Quando in dark mode, sposta a destra */
-body.dark-mode #eye-switch {
-  left: auto;
-  right: 20px;
-  background-color: #333;
-}
-
-/* Tema chiaro (default) */
-body {
-  background-color: #fff;
-  color: #000;
-  transition: background-color 0.4s, color 0.4s;
-}
-
-/* Tema scuro */
-body.dark-mode {
-  background-color: #000;
-  color: #fff;
-}
-
-/* Pillola */
-#theme-switch {
-  position: fixed;
-  top: 30px;
-  left: 120px;
-  width: 70px;
-  height: 36px;
-  background-color: #000;
-  border-radius: 36px;
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-/* Cerchio con occhio */
-#pill-eye {
-  width: 28px;
-  height: 28px;
-  background-color: #fff;
+.cursor {
+  position: absolute;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s, background-color 0.3s, color 0.3s;
-  color: #000;
+  background-color: red;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
 }
 
-/* Posizione e stile in modalità scura */
-body.dark-mode #theme-switch {
-  background-color: #fff;
+.trail {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: trail-animation 0.5s forwards;
 }
 
-body.dark-mode #pill-eye {
-  transform: translateX(34px);
-  background-color: #000;
-  color: #fff;
+@keyframes trail-animation {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
-
 
   </style>
 </head>
@@ -505,7 +442,7 @@ style="position: absolute; top: 620px; left: 230px; cursor: pointer; z-index: 10
 </svg>
 
 <!-- Scritta nascosta -->
-<p id="eye-message" style="position: absolute; top: 680px; right: 125px; 
+<p id="eye-message" style="position: absolute; top: 500px; left: 350px; 
 max-width: 300px; font-style: italic; text-decoration: underline;
 font-size: 16px; color: black; opacity: 0; transition: opacity 0.5s ease;">
 L’occhio ti osserva... ma tu puoi controllarlo. 
@@ -1199,6 +1136,37 @@ function showSection(id) {
   pill.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
     pill.classList.toggle('dark-mode');
+  });
+</script>
+
+<script>
+  // Crea il cursore personalizzato
+  const cursor = document.createElement('div');
+  cursor.classList.add('cursor');
+  document.body.appendChild(cursor);
+
+  // Funzione per creare la scia
+  function createTrail(x, y) {
+    const trail = document.createElement('div');
+    trail.classList.add('trail');
+    document.body.appendChild(trail);
+    trail.style.left = `${x - 5}px`;
+    trail.style.top = `${y - 5}px`;
+
+    // Rimuovi la scia dopo l'animazione
+    setTimeout(() => {
+      trail.remove();
+    }, 500); // La durata dell'animazione della scia è 0.5s
+  }
+
+  // Segui il movimento del cursore
+  document.addEventListener('mousemove', (e) => {
+    // Posiziona il cursore personalizzato
+    cursor.style.left = `${e.pageX}px`;
+    cursor.style.top = `${e.pageY}px`;
+
+    // Crea la scia
+    createTrail(e.pageX, e.pageY);
   });
 </script>
 
