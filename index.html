@@ -360,26 +360,6 @@ html {
   pointer-events: none;
 }
 
-/* Cursore personalizzato - mano rossa */
-a, button, .clickable {
-  cursor: url('path_to_your_hand_red_image.png'), pointer;  /* Cursore personalizzato */
-}
-
-body {
-  cursor: none; /* Nasconde il cursore predefinito */
-}
-
-.cursor {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: red;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
-}
-
 .trail {
   position: absolute;
   width: 10px;
@@ -434,20 +414,13 @@ style="position: absolute; top: 660px; left: 170px; z-index: 10;">
 <path d="M2 12h20m-6-6 6 6-6 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
-<!-- Lampadina -->
-<svg id="bulb" width="40" height="125" viewBox="0 0 24 24"
-style="position: absolute; top: 620px; left: 230px; cursor: pointer; z-index: 10;">
-<path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.86-1.4 4.1-2.2 4.88A3.97 3.97 0 0 0 16 17H8a3.97 3.97 0 0 0-.8-3.12C6.4 13.1 5 11.86 5 9a7 7 0 0 1 7-7Z"
-   stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<!-- Testo al posto della lampadina -->
+<div id="play-text"
+     style="position: absolute; top: 673px; left: 230px; cursor: pointer; z-index: 10; font-size: 16px; font-family: sans-serif; font-weight: bold; color: black;">
+  gioca con l'occhio!
+</div>
 
-<!-- Scritta nascosta -->
-<p id="eye-message" style="position: absolute; top: 500px; left: 350px; 
-max-width: 300px; font-style: italic; text-decoration: underline;
-font-size: 16px; color: black; opacity: 0; transition: opacity 0.5s ease;">
-L’occhio ti osserva... ma tu puoi controllarlo. 
-Trascinalo, muovilo, lancialo: scopri cosa succede!
-</p>
+
 
 
   <section class="hero">
@@ -859,13 +832,6 @@ Trascinalo, muovilo, lancialo: scopri cosa succede!
     }
   </script>
   
-  
- 
-  <section id="contact" class="section" style="display:none;">
-    <h2>Contatti</h2>
-    <p>Scrivimi a <a href="mailto:info@peppvision.com">info@peppvision.com</a></p>
-  </section>
-
   <footer>
     <p>&copy; 2025 Peppvision. Tutti i diritti riservati. | <a href="#">Top</a></p>
   </footer>
@@ -958,7 +924,7 @@ Trascinalo, muovilo, lancialo: scopri cosa succede!
   </script>
   
 
-<section id="abbonamenti" class="section">
+  <section id="abbonamenti" class="section" style="display: none;">
   <h2>Abbonamenti</h2>
   <div class="abbonamenti-container">
     <!-- Rettangolo Basic -->
@@ -1037,11 +1003,7 @@ function showSection(id) {
     <img src="logo.png" id="splash-logo" alt="Logo" />
   </div>
 
-  <!-- Header con logo nella landing -->
-  <header>
-    <img src="logo.png" id="main-logo" alt="Logo principale" />
-  </header>
-
+  
   <!-- Il resto della tua landing page -->
   <main>
     <!-- contenuti della landing -->
@@ -1080,95 +1042,5 @@ function showSection(id) {
     message.style.opacity = '1';
   });
 </script>
-
-<script>
-  const toggleBtn = document.getElementById('theme-toggle');
-  const eyeSwitch = document.getElementById('eye-switch');
-  const body = document.body;
-
-  // Cambia tema
-  toggleBtn.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-
-    // Cambia testo del pulsante
-    if (body.classList.contains('dark-mode')) {
-      toggleBtn.textContent = '☀️ Modalità chiara';
-    } else {
-      toggleBtn.textContent = '🌙 Modalità scura';
-    }
-  });
-
-  // Anche cliccando sull’occhio cambia tema
-  eyeSwitch.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-
-    if (body.classList.contains('dark-mode')) {
-      toggleBtn.textContent = '☀️ Modalità chiara';
-    } else {
-      toggleBtn.textContent = '🌙 Modalità scura';
-    }
-  });
-</script>
-
-<div id="theme-switch" class="pill">
-  <div id="pill-eye">
-    <svg width="24" height="24" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-      <circle cx="12" cy="12" r="3" fill="currentColor"/>
-    </svg>
-  </div>
-</div>
-
-
-<script>
-  const pill = document.getElementById('theme-switch');
-  const body = document.body;
-
-  pill.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-  });
-</script>
-
-<script>
-  const pill = document.getElementById('theme-switch');
-  const body = document.body;
-
-  pill.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    pill.classList.toggle('dark-mode');
-  });
-</script>
-
-<script>
-  // Crea il cursore personalizzato
-  const cursor = document.createElement('div');
-  cursor.classList.add('cursor');
-  document.body.appendChild(cursor);
-
-  // Funzione per creare la scia
-  function createTrail(x, y) {
-    const trail = document.createElement('div');
-    trail.classList.add('trail');
-    document.body.appendChild(trail);
-    trail.style.left = `${x - 5}px`;
-    trail.style.top = `${y - 5}px`;
-
-    // Rimuovi la scia dopo l'animazione
-    setTimeout(() => {
-      trail.remove();
-    }, 500); // La durata dell'animazione della scia è 0.5s
-  }
-
-  // Segui il movimento del cursore
-  document.addEventListener('mousemove', (e) => {
-    // Posiziona il cursore personalizzato
-    cursor.style.left = `${e.pageX}px`;
-    cursor.style.top = `${e.pageY}px`;
-
-    // Crea la scia
-    createTrail(e.pageX, e.pageY);
-  });
-</script>
-
 </body>
 </html>
